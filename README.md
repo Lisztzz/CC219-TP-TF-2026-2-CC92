@@ -51,9 +51,10 @@ Aplicar técnicas de **minería de textos y procesamiento de lenguaje natural (N
 ```
 CC219-TP-TF-2026-2-CC92/
 ├── data/
-│   ├── steam_game_reviews_730945.csv        # dataset original (ver nota)
-│   └── steam_reviews_clean_sample.csv       # muestra estratificada de 50 000 reseñas del dataset final
+│   ├── README.md                            # descripción de los datos
+│   └── steam_reviews_clean_sample.zip       # muestra estratificada de 50 000 reseñas del dataset final
 ├── code/
+│   ├── README.md                            # descripción del codigo
 │   └── TP_CC219_Steam_EDA.ipynb             # carga, limpieza, normalización, EDA y modelo base
 └── README.md
 ```
