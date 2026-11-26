@@ -1,0 +1,3 @@
+Modelo,Accuracy,F1 macro,AUC-ROC,% marcadas como incoherentes
+"VADER (léxico, sin entrenamiento)",0.74958,0.6539839317079761,0.7557171651210024,10.13
+Regresión Logística (fuera del fold),0.87614,0.8165246877343952,0.9347811482593554,0.676

@@ -2,28 +2,30 @@
 
 ## Minería de textos sobre reseñas de videojuegos en Steam
 
-Trabajo Parcial y Final del curso **1ACC0219 – Aplicaciones de Data Science** (sección 4896), Universidad Peruana de Ciencias Aplicadas (UPC), ciclo 2026-2.
+Trabajo Parcial y Trabajo Final del curso **1ACC0219 – Aplicaciones de Data Science** (sección 4896), Universidad Peruana de Ciencias Aplicadas (UPC), ciclo 2026-2.
 
 ---
 
 ## Objetivo del trabajo
 
-Aplicar técnicas de **minería de textos y procesamiento de lenguaje natural (NLP)** sobre más de 700 mil reseñas de jugadores de Steam para construir modelos que, a partir del texto de una reseña, permitan:
+Aplicar técnicas de **minería de textos y procesamiento de lenguaje natural (NLP)** sobre más de 700 mil reseñas de jugadores de Steam para construir modelos que, a partir del texto de una reseña, permitan responder las siguientes preguntas, y poner esos modelos al alcance de estudios de videojuegos y jugadores mediante una aplicación web:
 
 | # | Pregunta | Tipo de tarea |
 |---|----------|---------------|
 | P1 | ¿La reseña recomienda el juego o no? | Clasificación binaria |
-| P2 | ¿La reseña será valorada como útil por otros usuarios? | Clasificación binaria |
-| P3 | ¿Qué tema aborda la queja o el elogio (rendimiento, precio, bugs, jugabilidad, historia)? | Modelado de tópicos y clasificación multiclase |
-| E1 *(extra)* | ¿Qué otros juegos recomendar a un usuario según lo que dicen las reseñas? | Sistema de recomendación basado en contenido |
-| E2 *(extra)* | ¿La reseña es incoherente (el texto contradice la recomendación por sarcasmo o error)? | Detección de discrepancias |
-| E3 *(extra)* | ¿La reseña será considerada graciosa por la comunidad? | Clasificación binaria |
+| P2 | ¿La reseña será votada como útil (2 votos o más)? | Clasificación binaria (texto y contexto) |
+| P3 | ¿De qué tema trata la queja o el elogio? | Modelado de tópicos y clasificación multiclase |
+| E1 *(extra)* | ¿Qué juegos recomendar a quien le gustó uno? | Sistema de recomendación basado en contenido |
+| E2 *(extra)* | ¿El texto contradice la recomendación (sarcasmo o error)? | Detección de discrepancias |
+| E3 *(extra)* | ¿La reseña será considerada graciosa? | Clasificación binaria |
 
 ## Alumnos
 
 | Código | Nombres y apellidos |
 |--------|---------------------|
-| U202219719 | Luis Enrique Aguilar Benites |
+| u202320608 | Wilber Franz Toledo Mamani |
+| u202219719 | Luis Enrique Aguilar Benites |
+| u202221068 | Juan Miguel Quijano Calderon |
 
 ## Descripción del dataset
 
@@ -44,39 +46,72 @@ Aplicar técnicas de **minería de textos y procesamiento de lenguaje natural (N
 | `timestamp_created` | Fecha de publicación (Unix) |
 | `name`, `appid`, `price` | Juego, identificador y precio (en centavos de dólar) |
 
-**Dataset final (preparado):** 693 605 reseñas en inglés, tras eliminar duplicados, copypastas, *ASCII art*, reseñas en otros idiomas y reseñas vacías, con columnas nuevas como `review_norm`, `review_clean`, `helpful`, `funny`, `horas_jugadas`, `precio_usd`, `antiguedad_dias` y `votos_por_mes`.
+**Dataset final (preparado):** 693 605 reseñas en inglés, tras eliminar duplicados, copypastas, *ASCII art*, reseñas en otros idiomas y reseñas vacías, con columnas nuevas como `review_norm`, `review_clean`, `helpful`, `funny`, `horas_jugadas`, `precio_usd`, `antiguedad_dias` y `votos_por_mes`. Para la modelización se usó una **muestra estratificada de 50 000 reseñas** de 733 juegos, incluida en `data/`.
 
 ## Estructura del repositorio
 
 ```
 CC219-TP-TF-2026-2-CC92/
 ├── data/
-│   ├── README.md                            # descripción de los datos
+│   ├── README.md                            # descripcion de los datos
 │   └── steam_reviews_clean_sample.zip       # muestra estratificada de 50 000 reseñas del dataset final
 ├── code/
-│   ├── README.md                            # descripción del codigo
-│   └── TP_CC219_Steam_EDA.ipynb             # carga, limpieza, normalización, EDA y modelo base
+│   ├── README.md                            # descripcion del codigo
+│   ├── TP_CC219_Steam_EDA.ipynb             # 1) carga, limpieza, normalizacion, EDA y modelo base (TP)
+│   ├── TF_CC219_Steam_Modelos.ipynb         # 2) modelos de P1, P2, P3, E1, E2 y E3 (TF)
+│   ├── figuras/                             # graficos generados por el notebook del TF
+│   ├── resultados/                          # tablas de metricas en CSV
+│   └── app/
+│       ├── app.py                           # aplicacion web en Streamlit
+│       ├── preprocesamiento.py              # limpieza de texto compartida por el notebook y la app
+│       ├── requirements.txt
+│       └── modelos/                         # modelos entrenados (.joblib)
 └── README.md
 ```
 
-> **Nota sobre los datos:** GitHub no admite archivos de más de 100 MB. El dataset original (285 MB) y el dataset final completo (636 MB) se obtienen ejecutando el notebook, que descarga el original directamente desde Kaggle con `kagglehub`. En la carpeta `data/` se incluye una muestra estratificada del dataset final.
+> **Nota sobre los datos:** GitHub no admite archivos de más de 100 MB. El dataset original (285 MB) y el dataset final completo (636 MB) se obtienen ejecutando el notebook del TP, que descarga el original desde Kaggle con `kagglehub`. El notebook del TF trabaja con la muestra de `data/`.
 
 ## Cómo ejecutar
 
-1. Abrir `code/TP_CC219_Steam_EDA.ipynb` en Google Colab.
-2. Ejecutar **Entorno de ejecución → Ejecutar todas** (tarda alrededor de 15 minutos).
-3. El notebook descarga el dataset, lo limpia, genera los gráficos y guarda los archivos en `data/`.
+**Notebooks (Google Colab)**
 
-**Principales librerías:** pandas, NumPy, Matplotlib, Seaborn, scikit-learn, NLTK, py3langid, WordCloud, vaderSentiment y kagglehub.
+1. `code/TP_CC219_Steam_EDA.ipynb`: **Entorno de ejecución → Ejecutar todas** (unos 15 minutos). Descarga, limpia y explora el dataset.
+2. `code/TF_CC219_Steam_Modelos.ipynb`: elegir **Entorno de ejecución → Cambiar tipo de entorno → GPU T4** y ejecutar todas las celdas (unos 15 minutos). Clona el repositorio si hace falta, entrena todos los modelos, ajusta DistilBERT (solo con GPU) y guarda figuras, tablas y modelos.
+
+**Aplicación web (local)**
+
+```bash
+cd code/app
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+La aplicación tiene tres pestañas: analizar una reseña nueva (P1, P2, P3 y alerta de incoherencia E2, con las palabras que explican la predicción), recomendar juegos parecidos (E1) y consultar las tablas de resultados.
+
+**Principales librerías:** pandas, NumPy, Matplotlib, scikit-learn, LightGBM, gensim, NLTK, LIME, vaderSentiment, Hugging Face Transformers y Streamlit.
+
+## Resultados
+
+| Pregunta | Mejor modelo | Métrica | Valor | Azar |
+|----------|--------------|---------|-------|------|
+| P1 – Recomienda | SVM lineal (TF-IDF 1–2 gramas) | F1 macro | 0.831 (AUC-ROC 0.935) | 0.500 |
+| P2 – Útil | LightGBM con variables numéricas | AUC-PR | 0.427 | 0.184 |
+| P3 – Tema | NMF (k = 8) + regresión logística | F1 macro | 0.879 | 0.125 |
+| E1 – Recomendador | TF-IDF + similitud coseno | Hit@5 | 0.953 | 0.007 |
+| E2 – Incoherencia | Regresión logística vs. VADER | AUC-ROC | 0.935 | 0.500 |
+| E3 – Graciosa | Regresión logística | AUC-PR | 0.243 | 0.119 |
 
 ## Conclusiones
 
-- Tras la limpieza se obtuvo un corpus de **693 605 reseñas en inglés** (94.9 % del original), con un desbalance de **81.4 % positivas y 18.6 % negativas**.
-- Las reseñas negativas son **más largas** (mediana de 36 palabras frente a 20), provienen de jugadores con **menos horas de juego** (12.0 h frente a 28.2 h) y reciben **más votos de “útil”**.
-- A mayor precio, menor satisfacción: los juegos de hasta USD 20 tienen 84 % de reseñas positivas y los de más de USD 60 solo 62 %.
-- Las **copypastas** reciben 5.7 veces más votos de “útil” que una reseña única y el *ASCII art* 4.8 veces más votos de “gracioso”, lo que evidencia el *farming* de votos y premios en Steam y justificó eliminarlos.
-- Los votos de “útil” acumulados favorecen a las reseñas antiguas, pero los **votos por mes** caen de 1.11 a 0.03 con la antigüedad: las reseñas reciben casi todos sus votos al inicio.
-- Según VADER, alrededor del **10 %** de las reseñas tiene un texto que contradice su recomendación (sarcasmo, humor o reseñas mixtas).
-- Un modelo base de **TF-IDF + regresión logística** alcanza un **AUC-ROC de 0.941** y un **F1 macro de 0.826** en la predicción de la recomendación (P1).
-- **Trabajo futuro:** entrenar DistilBERT, BERTopic y el sistema de recomendación, controlar el sesgo temporal en P2 y desarrollar una interfaz en Streamlit.
+- **P1:** el texto predice muy bien si la reseña recomienda el juego. El SVM lineal sobre TF-IDF logró un F1 macro de 0.831 y la regresión logística un AUC-ROC de 0.936; conservar las negaciones fue clave (“not worth”, “not recommend”). El sarcasmo sigue siendo el principal error de los modelos de bolsa de palabras.
+- **P2:** la utilidad depende más del contexto que de las palabras: si la reseña recomienda el juego (34 % de la importancia), su longitud (25 %) y su antigüedad (24 %). Todos los modelos duplican la referencia del azar, pero el texto solo es el más débil.
+- **P3:** NMF superó a LDA en coherencia en todos los casos y encontró 8 temas interpretables. Los **problemas técnicos** (43.6 % de reseñas negativas) y **campaña y multijugador** (25.3 %) concentran la insatisfacción.
+- **E1:** el recomendador ubica el juego correcto en el primer puesto en el 79.8 % de los casos y entre los cinco primeros en el 95.3 %, con recomendaciones explicables (Hades → Hades II, Bastion, Dead Cells).
+- **E2:** el modelo entrenado marca solo 0.7 % de incoherencias frente al 10.1 % de VADER; 141 reseñas fueron marcadas por ambos.
+- **E3:** el humor es lo más difícil de predecir (AUC-PR 0.243, el doble del azar).
+- **Trabajo futuro:** entrenar con el corpus completo, ajustar transformers por más épocas y para P2 y P3 (por ejemplo, BERTopic) y validar las reseñas incoherentes con un etiquetado manual.
+
+## Licencia
+
+- **Código** (`code/`): uso académico para el curso CC219 de la UPC, bajo licencia [MIT](https://opensource.org/licenses/MIT).
 - **Datos** (`data/`): derivados del dataset de Kaggle de akashunikaggle (2025), distribuidos bajo la misma licencia [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), como exige la licencia original.
