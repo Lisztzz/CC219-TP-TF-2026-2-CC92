@@ -94,7 +94,7 @@ La aplicación tiene tres pestañas: analizar una reseña nueva (P1, P2, P3 y al
 
 | Pregunta | Mejor modelo | Métrica | Valor | Azar |
 |----------|--------------|---------|-------|------|
-| P1 – Recomienda | SVM lineal (TF-IDF 1–2 gramas) | F1 macro | 0.831 (AUC-ROC 0.935) | 0.500 |
+| P1 – Recomienda | DistilBERT (fine-tuning, 1 época) | F1 macro | 0.856 (AUC-ROC 0.957) | 0.500 |
 | P2 – Útil | LightGBM con variables numéricas | AUC-PR | 0.427 | 0.184 |
 | P3 – Tema | NMF (k = 8) + regresión logística | F1 macro | 0.879 | 0.125 |
 | E1 – Recomendador | TF-IDF + similitud coseno | Hit@5 | 0.953 | 0.007 |
@@ -103,7 +103,7 @@ La aplicación tiene tres pestañas: analizar una reseña nueva (P1, P2, P3 y al
 
 ## Conclusiones
 
-- **P1:** el texto predice muy bien si la reseña recomienda el juego. El SVM lineal sobre TF-IDF logró un F1 macro de 0.831 y la regresión logística un AUC-ROC de 0.936; conservar las negaciones fue clave (“not worth”, “not recommend”). El sarcasmo sigue siendo el principal error de los modelos de bolsa de palabras.
+- **P1:** el texto predice muy bien si la reseña recomienda el juego. DistilBERT logró el mejor F1 macro (0.856) y AUC-ROC (0.957); entre los modelos clásicos, el SVM lineal sobre TF-IDF llegó a 0.831 entrenando en segundos. Conservar las negaciones fue clave (“not worth”, “not recommend”) y el sarcasmo sigue siendo el principal error, incluso para el transformer.
 - **P2:** la utilidad depende más del contexto que de las palabras: si la reseña recomienda el juego (34 % de la importancia), su longitud (25 %) y su antigüedad (24 %). Todos los modelos duplican la referencia del azar, pero el texto solo es el más débil.
 - **P3:** NMF superó a LDA en coherencia en todos los casos y encontró 8 temas interpretables. Los **problemas técnicos** (43.6 % de reseñas negativas) y **campaña y multijugador** (25.3 %) concentran la insatisfacción.
 - **E1:** el recomendador ubica el juego correcto en el primer puesto en el 79.8 % de los casos y entre los cinco primeros en el 95.3 %, con recomendaciones explicables (Hades → Hades II, Bastion, Dead Cells).

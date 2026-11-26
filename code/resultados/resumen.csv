@@ -1,7 +1,7 @@
 Pregunta,Mejor modelo,Métrica principal,Valor,Referencia (azar)
-P1 – Recomienda,SVM lineal,F1 macro,0.8305200145879704,0.5
+P1 – Recomienda,DistilBERT (fine-tuning),F1 macro,0.856,0.5
 P2 – Útil,LightGBM – numéricas con antigüedad,AUC-PR,0.4265145016578117,0.1842
 P3 – Tema,NMF (k=8) + Reg. Logística,F1 macro del clasificador,0.8785805471982802,0.125
-E1 – Recomendador,TF-IDF + similitud coseno,Hit@5,0.9528432732316228,0.006934812760055479
+E1 – Recomendador,TF-IDF + similitud coseno,Hit@5,0.9528432732316228,0.0069348127600554
 E2 – Incoherencia,Regresión Logística vs. VADER,AUC-ROC del juez,0.9347811482593554,0.5
-E3 – Graciosa,Regresión Logística,AUC-PR,0.24302589198905297,0.1194
+E3 – Graciosa,Regresión Logística,AUC-PR,0.2430258919890529,0.1194
